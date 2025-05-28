@@ -20,6 +20,7 @@ export default async function updateCustomer(formData) {
     body: body_msg,
   });
   if (!res.ok) {
-    throw new Error("Failed to update customer");
+    const errorData = await res.text();
+    throw new Error(`更新に失敗しました (${res.status}): ${errorData}`);
   }
 }

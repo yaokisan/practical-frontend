@@ -9,7 +9,7 @@ export default function UpdatePage(props) {
   const router = useRouter();
   const id = params.id;
   const formRef = useRef();
-  const [customerInfo, setCustomerInfo] = useState([]);
+  const [customerInfo, setCustomerInfo] = useState({});
 
   useEffect(() => {
     const fetchAndSetCustomer = async () => {
@@ -22,8 +22,13 @@ export default function UpdatePage(props) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(formRef.current);
-    await updateCustomer(formData);
-    router.push(`./${formData.get("customer_id")}/confirm`);
+    try {
+      await updateCustomer(formData);
+      router.push(`./${formData.get("customer_id")}/confirm`);
+    } catch (error) {
+      console.error('更新エラー:', error);
+      alert('顧客情報の更新に失敗しました。');
+    }
   };
 
   const previous_customer_name = customerInfo.customer_name;
